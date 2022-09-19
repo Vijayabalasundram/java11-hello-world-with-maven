@@ -11,14 +11,18 @@ jobs:
       volumes:
         - /home/runner/:/__w/java-hello-world-with-maven/java-hello-world-with-maven
     steps:
-    - name: Checkout Github Action
-      uses: actions/checkout@v3
-    - name: Cache Maven packages
-      uses: actions/cache@v2.1.4
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Cache local downloads
+      uses: actions/cache@v2
       with:
-         path: ~/.m2
-         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-         restore-keys: ${{ runner.os }}-m2
+        path: ~/downloads
+        key: ${{ runner.os }}-downloads-{{ hashFiles('image/*.sha512') }}
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ${{ github.workspace }}/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
     - name: Maven version set
       run: mvn clean versions:set -DnewVersion=0.4.0
     - name: Maven Build
