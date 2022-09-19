@@ -1,23 +1,22 @@
-name: Maven cache
-
-on: [push]
-
+name: Maven-version
+on:
+  push:
+    branches: [ master ]
 jobs:
-  build:
+  container-test-job:
     runs-on: ubuntu-latest
-
+    container:
+      image: maven:3.8.6-jdk-11
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-      - name: Cache Maven packages
-        uses: actions/cache@v2.1.4
-        with:
+    - name: Checkout Github Action
+      uses: actions/checkout@v3
+    - name: Cache Maven packages
+      uses: actions/cache@v2.1.4
+      with:
          path: ~/.m2
          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
          restore-keys: ${{ runner.os }}-m2
-      - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
-        
+    - name: Maven version set
+      run: mvn clean versions:set -DnewVersion=0.4.0
+    - name: Maven Build
+      run: mvn clean package
