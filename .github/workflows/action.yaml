@@ -7,9 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: maven:3.8.6-jdk-11
-      #options: --user root
-      volumes:
-        - /home/runner/:/__w/java11-hello-world-with-maven/java11-hello-world-with-maven
     steps:
     - name: Checkout
       uses: actions/checkout@v2
