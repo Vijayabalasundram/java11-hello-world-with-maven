@@ -14,8 +14,9 @@ jobs:
       uses: actions/cache@v2
       id: cache
       with:
-        path: ${{ github.workspace }}/.m2/java11-hello-world-with-maven
-        key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+        path: /root/.m2/repository
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
     - name: Maven version set
       run: mvn clean versions:set -DnewVersion=0.4.0
     - name: Maven Build
